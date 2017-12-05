@@ -12,7 +12,7 @@ class text_cleaner:
         self.stop_words = set(stop_words)
 
     def apply_to_all(self, sentences):
-        function_list = [self.remove_stop_word, self.decontraction, self.epytruc,
+        function_list = [self.remove_stop_word, self.decontraction, self.acronyms,
             self.replace_number, self.stemming, self.lemmatize]
         cleaned_sentences = []
         with progressbar.ProgressBar(max_value=len(sentences)) as bar:
@@ -39,7 +39,7 @@ class text_cleaner:
         word = word.replace("n'd", " not")
         return word
 
-    def epytruc(self, word):
+    def acronyms(self, word):
         if word == 'rt':
             word = 'real talk'
         if word == 'im':
