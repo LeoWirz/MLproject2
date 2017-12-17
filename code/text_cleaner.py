@@ -12,8 +12,13 @@ class text_cleaner:
         self.stop_words = set(stop_words)
 
     def apply_to_all(self, sentences):
-        function_list = [self.remove_stop_word, self.decontraction, self.acronyms,
-            self.replace_number, self.stemming, self.lemmatize]
+        function_list = [self.remove_stop_word, 
+                        self.decontraction, 
+                        self.acronyms,
+                        self.replace_number, 
+                        #self.stemming, 
+                        self.lemmatize
+                        ]
         cleaned_sentences = []
         with progressbar.ProgressBar(max_value=len(sentences)) as bar:
             for i,sentence in enumerate(sentences):
@@ -26,9 +31,16 @@ class text_cleaner:
         return reduce(lambda w, f: f(w), functions, word)
 
     def remove_stop_word(self, word):
+        """
+        remove stop word from the custom list
+        not really needed since libraries do it already
+        """
         return word if word not in self.stop_words else ''
 
     def decontraction(self, word):
+        """
+        decontracts english contraction
+        """
         word = word.replace("don't", "do not")
         word = word.replace("won't", "will not")
         word = word.replace("'t", " not")
@@ -40,6 +52,9 @@ class text_cleaner:
         return word
 
     def acronyms(self, word):
+        """
+        reverts common acronyms
+        """
         if word == 'rt':
             word = 'real talk'
         if word == 'im':
@@ -47,6 +62,9 @@ class text_cleaner:
         return word
 
     def replace_number(self, word):
+        """
+        change any number to the word "number"
+        """
         try: 
             float(word)
             return '<number>'
@@ -54,7 +72,13 @@ class text_cleaner:
             return word    
     
     def stemming(self, word):
+        """
+        stemming
+        """
         return self.ps.stem(word)
 
     def lemmatize(self, word):
+        """
+        lemmatizing
+        """
         return self.wl.lemmatize(word)
